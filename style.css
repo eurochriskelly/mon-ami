@@ -1,0 +1,97 @@
+#ml-monitor-header {
+  background-color:rgba(85, 85, 85, 0.63);
+  position: absolute;
+  z-index: 1000;
+}
+#close-ml-mon {
+  float: right;
+  margin: 5px;
+  position: absolute;
+  right: 23px;
+  top: 10px;
+  background: #999;
+  border-radius: 40%;
+  font-size: 30px;
+  border-style: none;
+  color: white;
+  font-family: sans-serif;
+  z-index: 1001;
+}
+#close-ml-mon:hover {
+  background: #777;
+}
+#monitor-area {
+  background-color: white;
+  position: relative;
+  top: 20px;
+  bottom: 20px;
+  width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 800px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.btn-delete-graph {
+  float:none;
+  position: relative;
+  top: 24px;
+  z-index: 100;
+}
+.graph-holder > div {
+  width:100%;
+}
+
+.graph-holder > label {
+  position: relative;
+  float:right;
+  top: 23px;
+  z-index: 100;
+  color: #c1c1c1;
+  right: 100px;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.btn-keep {
+  position: absolute;
+  text-align: center;
+  width: 17px;
+  height: 15px;
+  z-index: 80;
+  padding:0;
+  margin:0;
+  right:18px;
+  background: white;
+  border: 1px solid #888;
+  color: #aa4643;
+}
+
+.btn-keep:hover {
+  border: 1px solid #333;
+  color: #7f413f;
+}
+
+#range-fillers > button {
+  background: #e8edf7;
+  border: 1px solid #777;
+}
+#range-fillers {
+  margin-left: auto;
+  margin-right: 0;
+  width: 116px;
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+#open-ml-mon {
+  background: #e8edf7;
+  color: white;
+  font-size: 1.0em;
+  color: #aa4643;
+  border: none;
+  border-radius: 4px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
