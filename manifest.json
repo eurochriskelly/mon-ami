@@ -39,6 +39,7 @@
       "js": [
         "scripts/jquery.min.js",
         "scripts/common.js",
+        "scripts/qconsole/registry.js",
         "scripts/qconsole/content.js"
       ],
       "css": [
