@@ -9,18 +9,45 @@
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/codeMirrorManipulation.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
   "content_scripts": [
     {
       "js": [
         "scripts/jquery.min.js",
-        "scripts/content.js"
+        "scripts/common.js",
+        "scripts/dashboard/content.js"
       ],
       "css": [
-        "style.css"
+        "style.css",
+        "styles/dashboard.css"
       ],
       "matches": [
         "https://*/history/*",
         "http://*/history/*"
+      ]
+    },
+    {
+      "js": [
+        "scripts/jquery.min.js",
+        "scripts/common.js",
+        "scripts/qconsole/content.js"
+      ],
+      "css": [
+        "style.css",
+        "styles/qconsole.css"
+      ],
+      "matches": [
+        "https://*/qconsole/*",
+        "http://*/qconsole/*"
       ]
     }
   ],

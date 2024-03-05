@@ -1,24 +1,4 @@
 /**
- * Build extension elements in a consistent and controlled way
- *
- *
- */
-class ElementMaker {
-  static handlers = []
-  constructor() { }
-  static button(label, id, handler) {
-    ElementMaker.handlers.push({ id, handler })
-    return $(`<button id="${id}" class="mlm-button">${label}<button>`)
-  }
-  static apply() {
-    ElementMaker.handlers.forEach(h => {
-      $(document).on('click', `#${h.id}`, h.handler)
-    })
-  }
-}
-const EM = ElementMaker
-
-/**
  * Add elements to the form to allow saving of graphs.
  *
  *
