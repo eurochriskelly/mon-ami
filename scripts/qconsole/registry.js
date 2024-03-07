@@ -11,10 +11,17 @@ const updateRegistry = async () => {
 
     COMMAND_LIST = []
     for (const registry of registries) {
-        const response = await fetch(registry);
-        const data = await response.json();
-        for (const item of data) {
-            COMMAND_LIST.push(item);
+        console.log('fetching registry:', registry)
+        let response
+        try {
+            response = await fetch(registry);
+            const data = await response.json();
+            for (const item of data) {
+                COMMAND_LIST.push(item);
+            }
+        } catch (e) {
+            console.error('Error:', e);
+            continue;
         }
     }
 }

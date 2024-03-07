@@ -25,14 +25,14 @@ const createHtmlContainer = () => {
 
     // Append the input and list elements to the container
     $container.append(
-        '<input type="text" id="dynamic-input" placeholder="Type to search...">' +
+        '<input type="text" id="dynamic-input" placeholder="Search registry ...">' +
         '<ul id="dynamic-list" style="list-style: none; margin-top: 5px; padding: 0; display: none;"></ul>'
     );
 
     var $input = $('#dynamic-input');
     var $list = $('#dynamic-list');
     $list.css('opacity', '1');
-    $list.css('background', 'white');
+    $list.css('background', '#efefef');
     $list.css('border', '1px solid #ccc');
     $list.css('border-radius', '4px');
     $list.css('margin', '2px');
