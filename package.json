@@ -1,0 +1,19 @@
+{
+  "name": "ml-mon-ami",
+  "version": "1.0.0",
+  "description": "This is a chrome extension for MarkLogic:",
+  "main": "background.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "regtest": "bash test/registry-test.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "httpster": "^1.2.1"
+  }
+}
