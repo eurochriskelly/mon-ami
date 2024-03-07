@@ -1,3 +1,6 @@
-{
-  "Hello registry!":"https://raw.githubusercontent.com/eurochriskelly/mon-ami/main/registry/default.json"
-} 
+[
+  {
+    "label": "Hello registry!",
+    "url": "https://raw.githubusercontent.com/eurochriskelly/mon-ami/main/registry/hello-world.js"
+  }
+] 
