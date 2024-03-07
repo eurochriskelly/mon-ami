@@ -1,13 +1,23 @@
 // poor mans registry for qconsole scripts
-const REGISTRY = {
-    "Extract logs": {
-        "description": "Extract logs from the database",
-        "script": "https://raw.githubusercontent.com/eurochriskelly/ml-log-stream/main/src/extract-logs.xqy"
+var REGISTRY = {};
+var COMMAND_LIST = []
+
+const updateRegistry = async () => {
+    let registries = JSON.parse(localStorage.getItem('registries'));
+
+    if (!registries.length) {
+        registries = ["https://raw.githubusercontent.com/eurochriskelly/mon-ami/main/registry/default.json"];
+    }
+
+    COMMAND_LIST = []
+    for (const registry of registries) {
+        const response = await fetch(registry);
+        const data = await response.json();
+        for (const item of data) {
+            COMMAND_LIST.push(item);
+        }
     }
 }
 
-var data = [
-    { label: 'Export logs', url: 'https://raw.githubusercontent.com/eurochriskelly/ml-log-stream/main/src/extract-logs.xqy' },
-    { label: 'Search logs', url: 'https://raw.githubusercontent.com/eurochriskelly/ml-log-stream/main/src/logStreamer.sjs' },
-    // Add more items to your array as needed
-];
+updateRegistry()
+

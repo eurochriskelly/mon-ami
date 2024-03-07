@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Download logs to zip",
+    "url": "https://raw.githubusercontent.com/eurochriskelly/ml-log-stream/main/src/extract-logs.xqy"
+  },
+  {
+    "label": "Log search",
+    "url": "https://raw.githubusercontent.com/eurochriskelly/ml-log-stream/main/src/logStreamer.sjs"
+  }
+] 
