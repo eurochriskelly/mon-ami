@@ -27,7 +27,7 @@
         "scripts/dashboard/content.js"
       ],
       "css": [
-        "style.css",
+        "styles/main.css",
         "styles/dashboard.css"
       ],
       "matches": [
@@ -40,11 +40,12 @@
         "scripts/jquery.min.js",
         "scripts/common.js",
         "scripts/qconsole/registry.js",
+        "scripts/qconsole/qc-control.js",
         "scripts/qconsole/configure.js",
         "scripts/qconsole/content.js"
       ],
       "css": [
-        "style.css",
+        "styles/main.css",
         "styles/qconsole.css"
       ],
       "matches": [
