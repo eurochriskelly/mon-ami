@@ -1,7 +1,8 @@
 const addGearButton = ($c) => {
   const $button = $('<button class="gearIcon">').text('⚙️'); // Create a button element
-  $c.prepend($('<span>').append($button));
   $button.css('border', 'none')
+  // add the button after the input
+  $('#mon-ami-query-search > input').after($button);
 }
 
 $(document).ready(function() {
