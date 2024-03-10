@@ -42,15 +42,11 @@ const createHtmlContainer = () => {
                 text: item.label,
                 tabindex: 0,
                 click: function() {
-                    console.log(`Fetching: ${item.url}`);
                     // Example fetch, implement according to your needs
                     fetch(item.url)
                         .then(response => response.text())
-                        .then(data => {
-                            // console.log(data)
-                            loadContent(data)
-                        })
-                        .catch(error => console.error('Error:', error));
+                        .then(data     => loadContent(data))
+                        .catch(error   => console.error('Error:', error));
 
                     $input.val(''); // Reset input
                     $list.hide(); // Hide list

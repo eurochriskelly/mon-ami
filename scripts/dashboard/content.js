@@ -140,7 +140,6 @@ class PageEnhancer {
         II(`Registering click event for button [${bnId}].`)
         $(`#${bnId}`).on('click', () => {
           const id = $(`#${bnId}`)[0].parentNode.parentNode.parentNode.id
-          console.log(`Storing chart with id [${id}].`)
           this.banner.trigger('keep-graph', id)
         })
       }, 2000)

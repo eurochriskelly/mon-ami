@@ -11,7 +11,6 @@ const updateRegistry = async () => {
 
     COMMAND_LIST = []
     for (const registry of registries) {
-        console.log('fetching registry:', registry)
         let response
         try {
             response = await fetch(registry);
