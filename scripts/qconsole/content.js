@@ -1,8 +1,53 @@
 var CM = null
 
-function loadContent(content) {
+const loadContent = (content, type) => {
     const event = new CustomEvent('clearCodeMirror', { detail: content });
     document.dispatchEvent(event);
+    setTimeout(() => {
+        // Assuming the id of your select element is 'dropdown-id'
+        var selectElement = document.getElementById('query-type');
+        let visibleText = 'JavaScript'
+        switch (type) {
+            case 'js':
+            case 'sjs':
+                visibleText = 'JavaScript'; break;
+            case 'sql':
+                visibleText = 'SQL'; break;
+            case 'sparql':
+                visibleText = 'SPARQL Query'; break;
+            case 'xqy':
+            case 'xq':
+                visibleText = 'XQuery'; break;
+            default: break
+        }
+        console.log(visibleText)
+        // Change the value as before
+        $('#query-type option').each(function() {
+            if ($(this).text() == visibleText) {
+                $(this).prop('selected', true);
+            }
+        });
+
+        // Manually dispatch the change event
+        if (typeof(Event) === 'function') {
+            // Modern browsers
+            var event = new Event('change', { 'bubbles': true, 'cancelable': true });
+            selectElement.dispatchEvent(event);
+        } else {
+            // IE 11
+            var event = document.createEvent('Event');
+            event.initEvent('change', true, true);
+            selectElement.dispatchEvent(event);
+        }
+
+        // If 'change' is not enough, you might also need to dispatch 'click' or 'mousedown' events to the dropdown
+        var mouseEvent = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true
+        });
+        selectElement.dispatchEvent(mouseEvent);
+    }, 500)
 }
 
 const createHtmlContainer = () => {
@@ -37,11 +82,13 @@ const createHtmlContainer = () => {
     $list.css('border-radius', '4px');
     $list.css('margin', '2px');
     $list.css('font-size', '0.9rem');
+    $input.css('background', '#cbebff');
 
     // Function to update the list based on the input
     function updateList(filteredData) {
         $list.empty(); // Clear current list
         filteredData.forEach(function (item) {
+            const { type } = item
             $('<li>', {
                 text: item.label,
                 tabindex: 0,
@@ -50,7 +97,7 @@ const createHtmlContainer = () => {
                     // Example fetch, implement according to your needs
                     fetch(item.url)
                         .then(response => response.text())
-                        .then(loadContent)
+                        .then(x => loadContent(x, type))
                         .catch(error => console.error('Error:', error));
                     $input.val(''); // Reset input
                     $list.hide(); // Hide list
@@ -77,9 +124,11 @@ const createHtmlContainer = () => {
     // Listen for input changes to filter the list
     $input.on('input', function () {
         var value = $(this).val().toLowerCase();
-        var filteredData = COMMAND_LIST.filter(function (item) {
-            return item.label.toLowerCase().indexOf(value) > -1;
-        });
+        var filteredData = COMMAND_LIST
+            .filter(function (item) {
+                return item.label.toLowerCase().indexOf(value) > -1;
+            })
+            .sort()
         updateList(filteredData);
     });
 
@@ -91,7 +140,7 @@ const createHtmlContainer = () => {
     $input.on('blur', function () {
         setTimeout(() => {
             $list.hide();
-        }, 2000)
+        }, 1000)
     });
 
     // Keyboard navigation for the input field
