@@ -1,3 +1,38 @@
 body {
-    background-color: aqua;
+    /* background-color: aqua; */
+}
+
+#dynamic-list-container {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    z-index: 9999;
+}
+#dynamic-list {
+    min-width: 300px;
+    background-color: #ffffffee;
+    color: #252a40;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 0.9rem;
+}
+#dynamic-list li {
+    font-size: 0.8em;
+}
+
+#dynamic-list li:hover {
+    background-color: #999;
+    color: white;
+}
+
+#dynamic-list li button {
+    display: none;
+}
+#dynamic-list li:hover button {
+    display: block;
+}
+#mon-ami-query-search {
+    display: flex;
+    justify-content: flex-end; 
 }
