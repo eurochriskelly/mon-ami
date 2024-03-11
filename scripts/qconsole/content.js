@@ -17,7 +17,6 @@ const loadContent = (content, type) => {
             case 'xq': visibleText = 'XQuery'; break;
             default: break
         }
-        console.log(visibleText)
         // Change the value as before
         $('#query-type option').each(function () {
             if ($(this).text() == visibleText) {
@@ -76,9 +75,7 @@ const createHtmlContainer = () => {
                 $list.hide(); // Hide list after selection
             }
             // Create the list item
-            const $li = $('<li>', {
-                css: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }
-            });
+            const $li = $('<li>');
 
             // Show the query label in the list
             $('<span>', { text: item.label }).appendTo($li);
@@ -86,7 +83,6 @@ const createHtmlContainer = () => {
             // Create and add the action button
             $('<button>', {
                 text: '+', // Change this to whatever text or symbol you prefer
-                css: { width: '20px', border: 'none', height: '20px', marginLeft: '10px' },
                 click: async (e) => {
                     e.stopPropagation(); // Prevent triggering the li's click event
                     const tabName = await qc.addTab(item.label)
@@ -119,13 +115,23 @@ const createHtmlContainer = () => {
     // Show all items when the input is focused
     $input.on('focus', () => updateList(COMMAND_LIST));
 
-    $container.on('blur', () => {
-        console.log('bluh conainer')
-        setTimeout(() => {
-            console.log('bluuuuuuuh')
-            $list.hide()
-        }, 500)
-    })
+
+    $(document).on('click', function(e) {
+        // Check if the clicked area is not the search box, and not the list or a child of the list
+        if (!$(e.target).closest('#dynamic-input').length && !$(e.target).closest('#dynamic-list').length) {
+            $list.hide(); // Hide the list
+        }
+    });
+
+    // Prevent click inside the search box from propagating to the document
+    $('#dynamic-input').on('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Similarly, prevent click inside the list from propagating to the document
+    $('#dynamic-list').on('click', function(e) {
+        e.stopPropagation();
+    });
 
     // Keyboard navigation for the input field
     $input.on('keydown', function (e) {

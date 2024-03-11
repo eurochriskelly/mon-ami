@@ -31,10 +31,7 @@ $(document).ready(function() {
         closeDialog();
       }
     });
-
-    // Close dialog on close button click
     $('#closeDialog').click(closeDialog);
-
     $('#addRegistry').click(function() {
       const url = $('#newRegistryUrl').val();
       if (url) {
