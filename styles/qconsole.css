@@ -1,3 +1,47 @@
 body {
-    background-color: aqua;
+    /* background-color: aqua; */
+}
+
+#dynamic-list-container {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    z-index: 9999;
+}
+#dynamic-list {
+    min-width: 300px;
+    background-color: #ffffffee;
+    color: #252a40;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 0.9rem;
+}
+#dynamic-list li {
+    font-size: 0.8em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+#dynamic-list li:hover {
+    background-color: #a0a4b4;
+    color: white;
+}
+
+#dynamic-list li button {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: none;
+    margin-left: 10px;
+}
+
+#dynamic-list li:hover button {
+    display: block;
+}
+#mon-ami-query-search {
+    display: flex;
+    justify-content: flex-end; 
 }

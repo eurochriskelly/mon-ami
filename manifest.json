@@ -4,10 +4,10 @@
   "version": "1.0",
   "description": "MarkLogic monitoring friend",
   "icons": {
-    "16": "images/icon-16.png",
-    "32": "images/icon-32.png",
-    "48": "images/icon-48.png",
-    "128": "images/icon-128.png"
+    "16": "styles/images/icon-16.png",
+    "32": "styles/images/icon-32.png",
+    "48": "styles/images/icon-48.png",
+    "128": "styles/images/icon-128.png"
   },
   "web_accessible_resources": [
     {
@@ -27,7 +27,7 @@
         "scripts/dashboard/content.js"
       ],
       "css": [
-        "style.css",
+        "styles/main.css",
         "styles/dashboard.css"
       ],
       "matches": [
@@ -40,11 +40,12 @@
         "scripts/jquery.min.js",
         "scripts/common.js",
         "scripts/qconsole/registry.js",
+        "scripts/qconsole/qc-control.js",
         "scripts/qconsole/configure.js",
         "scripts/qconsole/content.js"
       ],
       "css": [
-        "style.css",
+        "styles/main.css",
         "styles/qconsole.css"
       ],
       "matches": [

@@ -1,7 +1,8 @@
 const addGearButton = ($c) => {
   const $button = $('<button class="gearIcon">').text('⚙️'); // Create a button element
-  $c.prepend($('<span>').append($button));
   $button.css('border', 'none')
+  // add the button after the input
+  $('#mon-ami-query-search > input').after($button);
 }
 
 $(document).ready(function() {
@@ -30,10 +31,7 @@ $(document).ready(function() {
         closeDialog();
       }
     });
-
-    // Close dialog on close button click
     $('#closeDialog').click(closeDialog);
-
     $('#addRegistry').click(function() {
       const url = $('#newRegistryUrl').val();
       if (url) {
