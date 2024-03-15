@@ -23,6 +23,19 @@ const updateRegistry = async () => {
             continue;
         }
     }
+
+    COMMAND_LIST = COMMAND_LIST
+        .sort((a, b) => a.label > b.label ? 1 : a.label < b.label ? -1 : 0)
+        .map(item => {
+            const parts = item.label.split('/')
+            const section = parts[0]
+            const label = parts.slice(1).join('/')
+            return {
+                ...item,
+                section,
+                label
+            }
+        })
 }
 
 updateRegistry()

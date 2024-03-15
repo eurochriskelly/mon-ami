@@ -37,4 +37,20 @@ const qc = {
             }
         }, 100);
     }),
+    setWorkspaceWidth: (widthPx) => {
+        // set the width of the workspace to the given width in pixels
+        $('#sidebar-space').css('width', widthPx);
+        // also adjust editor options buttons
+        $('#editor-options-btn').css('right', widthPx+50);
+        $('#sidebar-history-btn').css('right', widthPx+10);
+    },
+    // 
+    // TODO: Some useful QC commands to be implemented
+    setPreviewMode: (mode) => {
+        // Change the preview mode to one of the available options
+        // e.g. XML, Text, JSON, HTML
+    }
+
 }
+
+

@@ -1,69 +1,52 @@
 var CM = null
 
+var MODE = 'local'
+
 /* Load the content of the selected item into a new or existing tab */
 const loadContent = (content, type) => {
     const event = new CustomEvent('clearCodeMirror', { detail: content });
     document.dispatchEvent(event);
     setTimeout(() => {
-        // Assuming the id of your select element is 'dropdown-id'
-        var selectElement = document.getElementById('query-type');
-        let visibleText = 'JavaScript'
-        switch (type) {
-            case 'js':
-            case 'sjs': visibleText = 'JavaScript'; break;
-            case 'sql': visibleText = 'SQL'; break;
-            case 'sparql': visibleText = 'SPARQL Query'; break;
-            case 'xqy':
-            case 'xq': visibleText = 'XQuery'; break;
-            default: break
-        }
-        // Change the value as before
-        $('#query-type option').each(function () {
-            if ($(this).text() == visibleText) {
-                $(this).prop('selected', true);
-            }
-        });
-
-        // Modern browsers
-        var event = new Event('change', { 'bubbles': true, 'cancelable': true });
-        selectElement.dispatchEvent(event);
-
-        // If 'change' is not enough, you might also need to dispatch 'click' or 'mousedown' events to the dropdown
-        var mouseEvent = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true
-        });
-        selectElement.dispatchEvent(mouseEvent);
-    }, 50)
+        const typeToText = {
+            'js': 'JavaScript',
+            'sjs': 'JavaScript',
+            'sql': 'SQL',
+            'sparql': 'SPARQL Query',
+            'xqy': 'XQuery',
+            'xq': 'XQuery'
+        };
+        const visibleText = typeToText[type] || 'JavaScript';
+        $('#query-type').val($('#query-type option').filter(function () { return $(this).text() === visibleText; }).val()).trigger('change');
+    }, 50);
 }
 
-
 const createHtmlContainer = () => {
-    // Find the .qc-tabs-holder div and append the container to it
-    var $tabsHolder = $('.qc-tabs-holder').first(); // Use .first() in case there are multiple elements with this class
-
-    // Create the container with adjusted positioning
-    var $container = $('<div>', { id: 'dynamic-list-container' }).appendTo($tabsHolder);
-
-    // The .qc-tabs-holder needs a CSS position other than 'static' for absolute positioning to work
-    $tabsHolder.css('position', 'relative');
-
-    // Append the input and list elements to the container
-    $container.append(
-        '<span id="mon-ami-query-search">' +
-        '  <input type="text" id="dynamic-input" placeholder="Search registry ..." />' + 
-        '</span>' +
-        '<ul id="dynamic-list" style="list-style: none; margin-top: 5px; padding: 0; display: none;"></ul>'
-    );
-
-    var $input = $('#dynamic-input');
-    var $list = $('#dynamic-list');
-    $input.css('background', '#cbebff');
+    var $input = $('#dynamic-input'); // the search box
+    var $list = $('#query-list');
     // Function to update the list based on the input
-    function updateList(filteredData) {
-        $list.empty(); // Clear current list
-        filteredData.forEach(function (item) {
+    function updateList(filteredData = [], hide=false) {
+        if (!filteredData.length) return
+        $('#query-list li.remote-script').remove();
+        let lastSection = ''
+        filteredData.forEach(function (item, i) {
+            const { section } = item
+            if (section != lastSection) {
+                const li = $(`<li>`, {
+                    text: `📦 ${item.section}`,
+                    class: 'remote-script',
+                    css: {
+                        textTransform: 'uppercase',
+                        fontStyle: 'italic',
+                        color: 'rgb(119, 80, 40)',
+                        fontWeight: 'normal',
+                        background: 'none',
+                        border: 'none !important',
+                    }
+                }).appendTo($list)
+
+                if (hide) li.hide()
+                lastSection = section
+            }
             // Function to populate the content based on the selected item
             const populateContent = () => {
                 // Example fetch, implement according to your needs
@@ -72,81 +55,121 @@ const createHtmlContainer = () => {
                     .then(x => loadContent(x, item.type))
                     .catch(error => console.error('Error:', error));
                 $input.val(''); // Reset input
-                $list.hide(); // Hide list after selection
             }
             // Create the list item
-            const $li = $('<li>');
-
-            // Show the query label in the list
-            $('<span>', { text: item.label }).appendTo($li);
-
-            // Create and add the action button
-            $('<button>', {
-                text: '+', // Change this to whatever text or symbol you prefer
-                click: async (e) => {
-                    e.stopPropagation(); // Prevent triggering the li's click event
-                    const tabName = await qc.addTab(item.label)
-                    populateContent();
-                }
-            }).appendTo($li);
+            const fn = async (e) => {
+                e.stopPropagation(); // Prevent triggering the li's click event
+                const tabName = await qc.addTab(item.label)
+                populateContent();
+            }
+            const $li = remoteItem(item.label, item.type, fn).addClass('remote-script').show()
+            if (hide) $li.hide()
 
             // Append the fully constructed li to the list
             $li.appendTo($list).click(populateContent);
         });
-
-        if (filteredData.length) {
-            $list.show(); // Show list if there are items
-        } else {
-            $list.hide(); // Hide list if empty
-        }
     }
-
-    // Listen for input changes to filter the list
-    $input.on('input', function () {
-        var value = $(this).val().toLowerCase();
+    function filterOnType (init = false) {
+        var value = init ? null : $(this).val().toLowerCase();
         var filteredData = COMMAND_LIST
             .filter(function (item) {
+                if (!value) return true
                 return item.label.toLowerCase().indexOf(value) > -1;
             })
-            .sort()
-        updateList(filteredData);
-    });
-
-    // Show all items when the input is focused
-    $input.on('focus', () => updateList(COMMAND_LIST));
-
-
-    $(document).on('click', function(e) {
-        // Check if the clicked area is not the search box, and not the list or a child of the list
-        if (!$(e.target).closest('#dynamic-input').length && !$(e.target).closest('#dynamic-list').length) {
-            $list.hide(); // Hide the list
-        }
-    });
+        updateList(filteredData, init);
+    }
+    filterOnType(true)
+    // Listen for input changes to filter the list
+    $input.on('input', filterOnType);
 
     // Prevent click inside the search box from propagating to the document
-    $('#dynamic-input').on('click', function(e) {
-        e.stopPropagation();
-    });
+    $('#dynamic-input').on('click', function (e) { e.stopPropagation(); });
 
     // Similarly, prevent click inside the list from propagating to the document
-    $('#dynamic-list').on('click', function(e) {
-        e.stopPropagation();
-    });
+    $('#query-list').on('click', function (e) { e.stopPropagation(); });
+}
 
-    // Keyboard navigation for the input field
-    $input.on('keydown', function (e) {
-        if (e.key === "ArrowDown") {
-            e.preventDefault(); // Prevent cursor from moving
-            $list.children().first().focus(); // Focus on the first list item
+// Create new elements ...
+const remoteItem = (label, type, fn) => {
+    const item = $(`<li>
+        <div role="button" class="query-doc-name-space">
+            <p class="xquery">
+                <span class="visually-hidden">${type}</span>
+            </p>
+            <span class="query-doc-name">${label.length > 22 ? label.substring(0,22) : label}</span>
+        </div>
+        <button style="border:none;background:none;float:right">📑</button>
+    </li>`);
+
+    item.find('button').click(fn);
+    return item;
+}
+
+const initializeWarehouseDom = () => {
+    $('#snippets-content').css('display', 'none');
+    const $workspaceTitle = $('#workspace-title')
+    const $toggleBtn = $('<button>', {
+        id: 'toggle-button',
+        text: '🌐',
+        css: {
+            position: 'absolute',
+            background: 'none',
+            right : '10px',
+            top: '4px',
+            width: '24px',
+            border: 'none',
         }
     });
 
-    return $container
+    // For each li under ul#query-list, add a class "local-script"
+    $toggleBtn.on('click', () => {
+        if (MODE == 'local') {
+            MODE = 'remote'
+            // $('#query-list-space').css('background', '#efe3d8')
+        } else {
+            MODE = 'local'
+            // $('#query-list-space').css('background', '#e8edf7')
+        }
+        $('#add-query-space').toggle();
+        $('#sidebar-workspace-btn').toggle();
+        $('#workspace-title-text').toggle();
+        $('#workspace-arrow').toggle();
+        if (MODE == 'local') {
+            $('#query-list > li').show();
+            $('#query-list > li.remote-script').hide();
+        } else {
+            $('#query-list > li').hide();
+            $('#query-list > li.remote-script').show();
+        }
+        // Turn on hidden items
+        $('#dynamic-input').toggle()
+    })
+    $('#sidebar-btns').append($toggleBtn);
+    $('#sidebar-btns').css('position', 'relative')
+    $('<input>', {
+        id: 'dynamic-input',
+        type: 'text',
+        placeholder: 'Search registry ...',
+        css: {
+            width: '165px',
+            margin: '2px'
+        }
+    })
+        .hide()
+        .insertAfter($workspaceTitle)
 }
 
 $(document).ready(() => {
-    const $c = createHtmlContainer()
-    addGearButton($c)
+    addGearButton()
+    initializeWarehouseDom()
+    var interval
+    interval = setInterval(() => {
+        if (COMMAND_LIST.length) {
+            createHtmlContainer()
+            clearInterval(interval)
+        }
+    }, 100) 
+    qc.setWorkspaceWidth(200)
     const scriptElement = document.createElement('script');
     scriptElement.src = chrome.runtime.getURL('scripts/qconsole/codeMirrorManipulation.js');
     (document.head || document.documentElement).appendChild(scriptElement);
