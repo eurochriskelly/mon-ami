@@ -1,22 +1,26 @@
-var CM = null
+var cm = null
 
 var MODE = 'local'
+
+const typeToText = {
+    'js': 'JavaScript',
+    'sjs': 'JavaScript',
+    'sql': 'SQL',
+    'sparql': 'SPARQL Query',
+    'xqy': 'XQuery',
+    'xq': 'XQuery'
+};
 
 /* Load the content of the selected item into a new or existing tab */
 const loadContent = (content, type) => {
     const event = new CustomEvent('clearCodeMirror', { detail: content });
     document.dispatchEvent(event);
     setTimeout(() => {
-        const typeToText = {
-            'js': 'JavaScript',
-            'sjs': 'JavaScript',
-            'sql': 'SQL',
-            'sparql': 'SPARQL Query',
-            'xqy': 'XQuery',
-            'xq': 'XQuery'
-        };
         const visibleText = typeToText[type] || 'JavaScript';
-        $('#query-type').val($('#query-type option').filter(function () { return $(this).text() === visibleText; }).val()).trigger('change');
+        $('#query-type').val($('#query-type option')
+            .filter(function () { return $(this).text() === visibleText; })
+            .val()
+        ).trigger('change');
     }, 50);
 }
 
@@ -69,8 +73,9 @@ const createHtmlContainer = () => {
             $li.appendTo($list).click(populateContent);
         });
     }
-    function filterOnType (init = false) {
+    function filterOnType (_, init = false) {
         var value = init ? null : $(this).val().toLowerCase();
+        console.log('value', value, init)
         var filteredData = COMMAND_LIST
             .filter(function (item) {
                 if (!value) return true
@@ -78,7 +83,7 @@ const createHtmlContainer = () => {
             })
         updateList(filteredData, init);
     }
-    filterOnType(true)
+    filterOnType(null, true)
     // Listen for input changes to filter the list
     $input.on('input', filterOnType);
 
@@ -91,16 +96,18 @@ const createHtmlContainer = () => {
 
 // Create new elements ...
 const remoteItem = (label, type, fn) => {
-    const item = $(`<li>
-        <div role="button" class="query-doc-name-space">
-            <p class="xquery">
-                <span class="visually-hidden">${type}</span>
-            </p>
-            <span class="query-doc-name">${label.length > 22 ? label.substring(0,22) : label}</span>
-        </div>
-        <button style="border:none;background:none;float:right">📑</button>
-    </li>`);
-
+    console.log('II', type, typeToText[type])
+    const item = $(`
+        <li>
+            <div role="button" class="query-doc-name-space">
+                <p class="${typeToText[type].toLowerCase()}">
+                    <span class="visually-hidden">${typeToText[type]}</span>
+                </p>
+                <span class="query-doc-name">${label.length > 22 ? label.substring(0,22) : label}</span>
+            </div>
+            <button style="border:none;background:none;float:right">📑</button>
+        </li>
+    `);
     item.find('button').click(fn);
     return item;
 }
@@ -125,9 +132,11 @@ const initializeWarehouseDom = () => {
     $toggleBtn.on('click', () => {
         if (MODE == 'local') {
             MODE = 'remote'
+            $toggleBtn.text('🏠') 
             // $('#query-list-space').css('background', '#efe3d8')
         } else {
             MODE = 'local'
+            $toggleBtn.text('🌐')
             // $('#query-list-space').css('background', '#e8edf7')
         }
         $('#add-query-space').toggle();
