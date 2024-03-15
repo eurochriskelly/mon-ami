@@ -1,8 +1,14 @@
-const addGearButton = ($c) => {
-  const $button = $('<button class="gearIcon">').text('⚙️'); // Create a button element
-  $button.css('border', 'none')
+const addGearButton = () => {
+  const $button = $('<button>', {
+    text: '⚙',
+    class: 'gearIcon',
+    css: {
+      border: 'none',
+      background: 'none',
+    }
+  })
   // add the button after the input
-  $('#mon-ami-query-search > input').after($button);
+  $('#workspace-sidebar-container').append($button);
 }
 
 $(document).ready(function() {

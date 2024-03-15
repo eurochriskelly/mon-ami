@@ -36,7 +36,6 @@ const createHtmlContainer = () => {
                     class: 'remote-script',
                     css: {
                         textTransform: 'uppercase',
-                        marginTop: '7px',
                         fontStyle: 'italic',
                         color: 'rgb(119, 80, 40)',
                         fontWeight: 'normal',
@@ -119,7 +118,6 @@ const initializeWarehouseDom = () => {
             top: '4px',
             width: '24px',
             border: 'none',
-            
         }
     });
 
@@ -127,10 +125,10 @@ const initializeWarehouseDom = () => {
     $toggleBtn.on('click', () => {
         if (MODE == 'local') {
             MODE = 'remote'
-            $('#query-list-space').css('background', '#efe3d8')
+            // $('#query-list-space').css('background', '#efe3d8')
         } else {
             MODE = 'local'
-            $('#query-list-space').css('background', '#e8edf7')
+            // $('#query-list-space').css('background', '#e8edf7')
         }
         $('#add-query-space').toggle();
         $('#sidebar-workspace-btn').toggle();
@@ -148,7 +146,6 @@ const initializeWarehouseDom = () => {
     })
     $('#sidebar-btns').append($toggleBtn);
     $('#sidebar-btns').css('position', 'relative')
-
     $('<input>', {
         id: 'dynamic-input',
         type: 'text',
@@ -163,7 +160,7 @@ const initializeWarehouseDom = () => {
 }
 
 $(document).ready(() => {
-    // addGearButton($c)
+    addGearButton()
     initializeWarehouseDom()
     var interval
     interval = setInterval(() => {
