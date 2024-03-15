@@ -40,6 +40,8 @@ const createHtmlContainer = () => {
                         fontStyle: 'italic',
                         color: 'rgb(119, 80, 40)',
                         fontWeight: 'normal',
+                        background: 'none',
+                        border: 'none !important',
                     }
                 }).appendTo($list)
 
@@ -56,26 +58,20 @@ const createHtmlContainer = () => {
                 $input.val(''); // Reset input
             }
             // Create the list item
-            const $li = remoteItem(item.label, 'XQuery').addClass('remote-script').show()
+            const fn = async (e) => {
+                e.stopPropagation(); // Prevent triggering the li's click event
+                const tabName = await qc.addTab(item.label)
+                populateContent();
+            }
+            const $li = remoteItem(item.label, item.type, fn).addClass('remote-script').show()
             if (hide) $li.hide()
 
-            // Create and add the action button
-            /* $('<button>', {
-                text: '+', // Change this to whatever text or symbol you prefer
-                click: async (e) => {
-                    e.stopPropagation(); // Prevent triggering the li's click event
-                    const tabName = await qc.addTab(item.label)
-                    populateContent();
-                }
-            }).appendTo($li);
-            */
             // Append the fully constructed li to the list
             $li.appendTo($list).click(populateContent);
         });
     }
     function filterOnType (init = false) {
         var value = init ? null : $(this).val().toLowerCase();
-        console.log('value', value, COMMAND_LIST)
         var filteredData = COMMAND_LIST
             .filter(function (item) {
                 if (!value) return true
@@ -92,29 +88,22 @@ const createHtmlContainer = () => {
 
     // Similarly, prevent click inside the list from propagating to the document
     $('#query-list').on('click', function (e) { e.stopPropagation(); });
-
-    // Keyboard navigation for the input field
-    /*
-    $input.on('keydown', function (e) {
-        if (e.key === "ArrowDown") {
-            e.preventDefault(); // Prevent cursor from moving
-            $list.children().first().focus(); // Focus on the first list item
-        }
-    });
-    */
 }
 
 // Create new elements ...
-const remoteItem = (label, type) => {
-    return $(`<li>
+const remoteItem = (label, type, fn) => {
+    const item = $(`<li>
         <div role="button" class="query-doc-name-space">
             <p class="xquery">
                 <span class="visually-hidden">${type}</span>
             </p>
-            <span class="query-doc-name">${label}</span>
+            <span class="query-doc-name">${label.length > 22 ? label.substring(0,22) : label}</span>
         </div>
-        <button class="new-icon"></button>
-    </li>`)
+        <button style="border:none;background:none;float:right">📑</button>
+    </li>`);
+
+    item.find('button').click(fn);
+    return item;
 }
 
 const initializeWarehouseDom = () => {
@@ -138,8 +127,10 @@ const initializeWarehouseDom = () => {
     $toggleBtn.on('click', () => {
         if (MODE == 'local') {
             MODE = 'remote'
+            $('#query-list-space').css('background', '#efe3d8')
         } else {
             MODE = 'local'
+            $('#query-list-space').css('background', '#e8edf7')
         }
         $('#add-query-space').toggle();
         $('#sidebar-workspace-btn').toggle();
