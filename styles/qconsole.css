@@ -9,7 +9,7 @@ body {
     z-index: 9999;
 }
 #dynamic-list {
-    min-width: 300px;
+    /* min-width: 300px; */
     background-color: #ffffffee;
     color: #252a40;
     border: 1px solid #ccc;
