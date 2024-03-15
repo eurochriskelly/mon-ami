@@ -24,9 +24,28 @@ const createHtmlContainer = () => {
     var $input = $('#dynamic-input'); // the search box
     var $list = $('#query-list');
     // Function to update the list based on the input
-    function updateList(filteredData) {
-        console.log('updating', filteredData)
-        filteredData.forEach(function (item) {
+    function updateList(filteredData = [], hide=false) {
+        if (!filteredData.length) return
+        $('#query-list li.remote-script').remove();
+        let lastSection = ''
+        filteredData.forEach(function (item, i) {
+            const { section } = item
+            if (section != lastSection) {
+                const li = $(`<li>`, {
+                    text: `📦 ${item.section}`,
+                    class: 'remote-script',
+                    css: {
+                        textTransform: 'uppercase',
+                        marginTop: '7px',
+                        fontStyle: 'italic',
+                        color: 'rgb(119, 80, 40)',
+                        fontWeight: 'normal',
+                    }
+                }).appendTo($list)
+
+                if (hide) li.hide()
+                lastSection = section
+            }
             // Function to populate the content based on the selected item
             const populateContent = () => {
                 // Example fetch, implement according to your needs
@@ -35,11 +54,10 @@ const createHtmlContainer = () => {
                     .then(x => loadContent(x, item.type))
                     .catch(error => console.error('Error:', error));
                 $input.val(''); // Reset input
-                $list.hide(); // Hide list after selection
             }
             // Create the list item
-            const $li = remoteItem(item.label, 'XQuery')
-
+            const $li = remoteItem(item.label, 'XQuery').addClass('remote-script').show()
+            if (hide) $li.hide()
 
             // Create and add the action button
             /* $('<button>', {
@@ -55,37 +73,25 @@ const createHtmlContainer = () => {
             $li.appendTo($list).click(populateContent);
         });
     }
-
-    // Listen for input changes to filter the list
-    $input.on('input', function () {
-        var value = $(this).val().toLowerCase();
+    function filterOnType (init = false) {
+        var value = init ? null : $(this).val().toLowerCase();
+        console.log('value', value, COMMAND_LIST)
         var filteredData = COMMAND_LIST
             .filter(function (item) {
+                if (!value) return true
                 return item.label.toLowerCase().indexOf(value) > -1;
             })
-            .sort()
-        updateList(filteredData);
-    });
-
-    // Show all items when the input is focused
-    $input.on('focus', () => updateList(COMMAND_LIST));
-
-    $(document).on('click', function (e) {
-        // Check if the clicked area is not the search box, and not the list or a child of the list
-        if (!$(e.target).closest('#dynamic-input').length && !$(e.target).closest('#query-list-remote').length) {
-            $list.hide(); // Hide the list
-        }
-    });
+        updateList(filteredData, init);
+    }
+    filterOnType(true)
+    // Listen for input changes to filter the list
+    $input.on('input', filterOnType);
 
     // Prevent click inside the search box from propagating to the document
-    $('#dynamic-input').on('click', function (e) {
-        e.stopPropagation();
-    });
+    $('#dynamic-input').on('click', function (e) { e.stopPropagation(); });
 
     // Similarly, prevent click inside the list from propagating to the document
-    $('#query-list').on('click', function (e) {
-        e.stopPropagation();
-    });
+    $('#query-list').on('click', function (e) { e.stopPropagation(); });
 
     // Keyboard navigation for the input field
     /*
@@ -107,16 +113,13 @@ const remoteItem = (label, type) => {
             </p>
             <span class="query-doc-name">${label}</span>
         </div>
-        <button class="delete-icon"></button>
-    </li>`).hide()
+        <button class="new-icon"></button>
+    </li>`)
 }
 
 const initializeWarehouseDom = () => {
     $('#snippets-content').css('display', 'none');
-
-    const $queryList = $('#query-list')
     const $workspaceTitle = $('#workspace-title')
-
     const $toggleBtn = $('<button>', {
         id: 'toggle-button',
         text: '🌐',
@@ -127,6 +130,7 @@ const initializeWarehouseDom = () => {
             top: '4px',
             width: '24px',
             border: 'none',
+            
         }
     });
 
@@ -154,8 +158,6 @@ const initializeWarehouseDom = () => {
     $('#sidebar-btns').append($toggleBtn);
     $('#sidebar-btns').css('position', 'relative')
 
-    $queryList.children('li').addClass('remote-script');
-
     $('<input>', {
         id: 'dynamic-input',
         type: 'text',
@@ -170,9 +172,15 @@ const initializeWarehouseDom = () => {
 }
 
 $(document).ready(() => {
-    // addGearButton($c) 
+    // addGearButton($c)
     initializeWarehouseDom()
-    createHtmlContainer()
+    var interval
+    interval = setInterval(() => {
+        if (COMMAND_LIST.length) {
+            createHtmlContainer()
+            clearInterval(interval)
+        }
+    }, 100) 
     qc.setWorkspaceWidth(200)
     const scriptElement = document.createElement('script');
     scriptElement.src = chrome.runtime.getURL('scripts/qconsole/codeMirrorManipulation.js');
