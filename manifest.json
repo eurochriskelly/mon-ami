@@ -40,6 +40,7 @@
         "scripts/jquery.min.js",
         "scripts/common.js",
         "scripts/qconsole/registry.js",
+        "scripts/qconsole/result-rerender.js",
         "scripts/qconsole/qc-control.js",
         "scripts/qconsole/configure.js",
         "scripts/qconsole/content.js"
