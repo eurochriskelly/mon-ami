@@ -169,6 +169,7 @@ const initializeWarehouseDom = () => {
 }
 
 $(document).ready(() => {
+    setupResultArea()
     addGearButton()
     initializeWarehouseDom()
     var interval
