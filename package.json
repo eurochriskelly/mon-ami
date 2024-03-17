@@ -1,6 +1,6 @@
 {
   "name": "ml-mon-ami",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Registry file generation for mon-ami chrome extension for MarkLogic",
   "main": "scripts/build.js",
   "files": [
