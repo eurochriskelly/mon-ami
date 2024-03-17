@@ -1,19 +1,23 @@
 {
-  "name": "ml-mon-ami",
+  "name": "@ml-field/mon-ami",
   "version": "1.0.0",
-  "description": "This is a chrome extension for MarkLogic:",
-  "main": "background.js",
+  "description": "Registry file generation for mon-ami chrome extension for MarkLogic",
+  "main": "scripts/build.js",
+  "files": [
+    "scripts/build"
+  ],
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "regtest": "bash test/registry-test.sh"
+    "test:reg": "bash test/registry-test.sh",
+    "test:scan": "bash test/registry-scan.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^12.0.0",
     "httpster": "^1.2.1"
   }
 }
