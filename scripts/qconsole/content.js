@@ -75,7 +75,6 @@ const createHtmlContainer = () => {
     }
     function filterOnType (_, init = false) {
         var value = init ? null : $(this).val().toLowerCase();
-        console.log('value', value, init)
         var filteredData = COMMAND_LIST
             .filter(function (item) {
                 if (!value) return true
@@ -96,7 +95,6 @@ const createHtmlContainer = () => {
 
 // Create new elements ...
 const remoteItem = (label, type, fn) => {
-    console.log('II', type, typeToText[type])
     const item = $(`
         <li>
             <div role="button" class="query-doc-name-space">
