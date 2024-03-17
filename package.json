@@ -1,6 +1,6 @@
 {
-  "name": "@ml-field/mon-ami",
-  "version": "1.0.0",
+  "name": "ml-mon-ami",
+  "version": "1.0.2",
   "description": "Registry file generation for mon-ami chrome extension for MarkLogic",
   "main": "scripts/build.js",
   "files": [
@@ -10,14 +10,12 @@
     "doc": "docs"
   },
   "scripts": {
-    "test:reg": "bash test/registry-test.sh",
     "test:scan": "bash test/registry-scan.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^12.0.0",
-    "httpster": "^1.2.1"
+    "commander": "^12.0.0"
   }
 }
