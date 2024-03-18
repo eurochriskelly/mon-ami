@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Scan a folder and produce a json file describing the folder structure
  */
