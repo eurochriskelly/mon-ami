@@ -95,11 +95,13 @@ const createHtmlContainer = () => {
 
 // Create new elements ...
 const remoteItem = (label, type, fn) => {
+    // const vishidden = typeToText[type] // seems to cause an issue in ml10
+    const vishidden = ''
     const item = $(`
         <li>
             <div role="button" class="query-doc-name-space">
                 <p class="${typeToText[type].toLowerCase()}">
-                    <span class="visually-hidden">${typeToText[type]}</span>
+                    <span class="visually-hidden">${vishidden}</span>
                 </p>
                 <span class="query-doc-name">${label.length > 22 ? label.substring(0,22) : label}</span>
             </div>
