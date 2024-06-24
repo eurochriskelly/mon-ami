@@ -13,7 +13,7 @@ const updateRegistry = async () => {
     for (const registry of registries) {
         let response
         try {
-            response = await fetch(registry);
+            response = await fetch(registry, { cache: "no-store"});
             const data = await response.json();
             for (const item of data) {
                 COMMAND_LIST.push(item);
